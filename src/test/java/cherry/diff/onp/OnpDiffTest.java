@@ -197,33 +197,33 @@ public class OnpDiffTest {
 	@Test
 	public void 削除_末尾_1要素() {
 		List<Integer> a = asList(0, 1, 2, 3, 4, 5, 6);
-		List<Integer> b = asList(0, 1, 2, 3, 4, 5, 9);
+		List<Integer> b = asList(9, 0, 1, 2, 3, 4, 5);
 		Info<Integer> info = idiff(a, b);
 		assertEquals(1 + 1, info.getEdist());
 		assertEquals(asList(0, 1, 2, 3, 4, 5), info.getLcs());
 		List<Elem<Integer>> ses = info.getSes();
 		assertEquals(7 + 1, ses.size());
-		for (int i = 0; i < 6; i++) {
+		for (int i = 1; i < 7; i++) {
 			assertEquals(Diff.Type.SAME, ses.get(i).getType());
 		}
-		assertEquals(Diff.Type.DEL, ses.get(6).getType());
+		assertEquals(Diff.Type.DEL, ses.get(7).getType());
 	}
 
 	@Test
 	public void 削除_末尾_3要素() {
 		List<Integer> a = asList(0, 1, 2, 3, 4, 5, 6);
-		List<Integer> b = asList(0, 1, 2, 3, 9, 9, 9);
+		List<Integer> b = asList(9, 9, 9, 0, 1, 2, 3);
 		Info<Integer> info = idiff(a, b);
 		assertEquals(3 + 3, info.getEdist());
 		assertEquals(asList(0, 1, 2, 3), info.getLcs());
 		List<Elem<Integer>> ses = info.getSes();
 		assertEquals(7 + 3, ses.size());
-		for (int i = 0; i < 4; i++) {
+		for (int i = 3; i < 7; i++) {
 			assertEquals(Diff.Type.SAME, ses.get(i).getType());
 		}
-		assertEquals(Diff.Type.DEL, ses.get(4).getType());
-		assertEquals(Diff.Type.DEL, ses.get(5).getType());
-		assertEquals(Diff.Type.DEL, ses.get(6).getType());
+		assertEquals(Diff.Type.DEL, ses.get(7).getType());
+		assertEquals(Diff.Type.DEL, ses.get(8).getType());
+		assertEquals(Diff.Type.DEL, ses.get(9).getType());
 	}
 
 	@Test
