@@ -82,7 +82,7 @@ public class OnpDiff implements Diff {
 		int y = 0;
 		for (Path pt : l) {
 			if (y - x < pt.getK()) {
-				// K+1：追加
+				// 差分の経路(k線)は現在位置よりも右側：追加
 				Type type = normal ? Type.ADD : Type.DEL;
 				while (y - x < pt.getK()) {
 					ses.add(new Elem<>(type, b.get(y)));
@@ -90,14 +90,14 @@ public class OnpDiff implements Diff {
 				}
 			}
 			if (y - x > pt.getK()) {
-				// K-1線：削除
+				// 差分の経路(k線)は現在位置よりも左側：削除
 				Type type = normal ? Type.DEL : Type.ADD;
 				while (y - x > pt.getK()) {
 					ses.add(new Elem<>(type, a.get(x)));
 					x += 1;
 				}
 			}
-			// K線：共通
+			// 差分の経路(k線)上で進めるだけ進む。
 			while (y < pt.getY()) {
 				ses.add(new Elem<>(Type.SAME, b.get(y)));
 				lcs.add(b.get(y));
@@ -126,11 +126,11 @@ public class OnpDiff implements Diff {
 
 		public Path maxAndSnake(int k, Path pt1, Path pt2, boolean normal) {
 
-			// max
+			// ON(NP)アルゴリズム：max
 			int y;
 			Path pt;
 			if (pt1.getY() + 1 == pt2.getY()) {
-				// k-1とk+1から合流する場合は「削除、追加」の順になるよう調整する。
+				// k-1とk+1の両方から合流する場合は「削除、追加」の順になるよう選択する。
 				if (normal) {
 					y = pt1.getY() + 1;
 					pt = pt1;
@@ -139,16 +139,16 @@ public class OnpDiff implements Diff {
 					pt = pt2;
 				}
 			} else if (pt1.getY() + 1 > pt2.getY()) {
-				// k - 1
+				// k-1
 				y = pt1.getY() + 1;
 				pt = pt1;
 			} else {
-				// k + 1
+				// k+1
 				y = pt2.getY();
 				pt = pt2;
 			}
 
-			// snake
+			// ON(NP)アルゴリズム：snake
 			int x = y - k;
 			while (x < m && y < n && comparator.compare(a.get(x), b.get(y)) == 0) {
 				x += 1;
