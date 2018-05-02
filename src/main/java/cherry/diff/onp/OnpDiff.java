@@ -30,21 +30,20 @@ public class OnpDiff implements Diff {
 
 	@Override
 	public <T> Info<T> diff(List<T> a, List<T> b, Comparator<T> comparator) {
-		if (a.size() <= b.size()) {
-			return doDiff(a, b, comparator, true);
+		int m = a.size();
+		int n = b.size();
+		if (m <= n) {
+			return doDiff(a, b, m, n, true, comparator);
 		} else {
-			return doDiff(b, a, comparator, false);
+			return doDiff(b, a, n, m, false, comparator);
 		}
 	}
 
-	private <T> Info<T> doDiff(List<T> a, List<T> b, Comparator<T> comparator, boolean normal) {
+	private <T> Info<T> doDiff(List<T> a, List<T> b, int m, int n, boolean normal, Comparator<T> comparator) {
+		MaxAndSnake maxAndSnake = createMaxAndSnake(a, b, m, n, normal, comparator);
 
 		// ////////////////////////////////////////////////////////
 		// ON(NP)アルゴリズム本体：ここから
-		int m = a.size();
-		int n = b.size();
-		MaxAndSnake maxAndSnake = createMaxAndSnake(a, b, m, n, comparator, normal);
-
 		int offset = m + 1;
 		Path[] fp = new Path[(m + 1) + (n + 1) + 1];
 		for (int k = -(m + 1); k <= (n + 1); k++) {
@@ -109,8 +108,8 @@ public class OnpDiff implements Diff {
 		return new Info<>(edist, ses, lcs);
 	}
 
-	private <T> MaxAndSnake createMaxAndSnake(List<T> a, List<T> b, int m, int n, Comparator<T> comparator,
-			boolean normal) {
+	private <T> MaxAndSnake createMaxAndSnake(List<T> a, List<T> b, int m, int n, boolean normal,
+			Comparator<T> comparator) {
 		return (int k, Path pt1, Path pt2) -> {
 
 			// ON(NP)アルゴリズム：max
