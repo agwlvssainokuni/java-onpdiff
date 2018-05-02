@@ -43,7 +43,7 @@ public class OnpDiff implements Diff {
 		// ON(NP)アルゴリズム本体：ここから
 		int m = a.size();
 		int n = b.size();
-		Snake<T> snake = new Snake<>(a, b, m, n, comparator);
+		MaxAndSnake maxAndSnake = createMaxAndSnake(a, b, m, n, comparator, normal);
 
 		int offset = m + 1;
 		Path[] fp = new Path[(m + 1) + (n + 1) + 1];
@@ -56,12 +56,12 @@ public class OnpDiff implements Diff {
 		do {
 			p += 1;
 			for (int k = -p; k < delta; k++) {
-				fp[k + offset] = snake.maxAndSnake(k, fp[k - 1 + offset], fp[k + 1 + offset], normal);
+				fp[k + offset] = maxAndSnake.apply(k, fp[k - 1 + offset], fp[k + 1 + offset]);
 			}
 			for (int k = delta + p; k > delta; k--) {
-				fp[k + offset] = snake.maxAndSnake(k, fp[k - 1 + offset], fp[k + 1 + offset], normal);
+				fp[k + offset] = maxAndSnake.apply(k, fp[k - 1 + offset], fp[k + 1 + offset]);
 			}
-			fp[delta + offset] = snake.maxAndSnake(delta, fp[delta - 1 + offset], fp[delta + 1 + offset], normal);
+			fp[delta + offset] = maxAndSnake.apply(delta, fp[delta - 1 + offset], fp[delta + 1 + offset]);
 		} while (fp[delta + offset].getY() < n);
 		int edist = delta + 2 * p;
 		// ON(NP)アルゴリズム本体：ここまで
@@ -109,22 +109,9 @@ public class OnpDiff implements Diff {
 		return new Info<>(edist, ses, lcs);
 	}
 
-	private static class Snake<T> {
-		private final List<T> a;
-		private final List<T> b;
-		private final int m;
-		private final int n;
-		private final Comparator<T> comparator;
-
-		public Snake(List<T> a, List<T> b, int m, int n, Comparator<T> comparator) {
-			this.a = a;
-			this.b = b;
-			this.m = m;
-			this.n = n;
-			this.comparator = comparator;
-		}
-
-		public Path maxAndSnake(int k, Path pt1, Path pt2, boolean normal) {
+	private <T> MaxAndSnake createMaxAndSnake(List<T> a, List<T> b, int m, int n, Comparator<T> comparator,
+			boolean normal) {
+		return (int k, Path pt1, Path pt2) -> {
 
 			// ON(NP)アルゴリズム：max
 			int y;
@@ -155,7 +142,12 @@ public class OnpDiff implements Diff {
 				y += 1;
 			}
 			return new Path(k, y, pt);
-		}
+		};
+	}
+
+	@FunctionalInterface
+	private interface MaxAndSnake {
+		Path apply(int k, Path pt1, Path pt2);
 	}
 
 	private static class Path {
