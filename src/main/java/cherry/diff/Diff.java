@@ -19,6 +19,7 @@ package cherry.diff;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 二つのシーケンスの差分を算出する機能を提供する。
@@ -45,6 +46,30 @@ public interface Diff {
 	 */
 	default <T> Info<T> diff(T[] a, T[] b, Comparator<T> comparator) {
 		return diff(Arrays.asList(a), Arrays.asList(b), comparator);
+	}
+
+	/**
+	 * 二つの文字列の差分を算出する。
+	 * 
+	 * @param a 「変更前」の文字列。
+	 * @param b 「変更後」の文字列。
+	 * @return 算出結果の「差分」情報を保持する。
+	 */
+	default Info<Character> diff(CharSequence a, CharSequence b) {
+		List<Character> aa = a.chars().mapToObj(i -> Character.valueOf((char) i)).collect(Collectors.toList());
+		List<Character> bb = b.chars().mapToObj(i -> Character.valueOf((char) i)).collect(Collectors.toList());
+		return diff(aa, bb, (x, y) -> x.compareTo(y));
+	}
+
+	/**
+	 * 二つの文字列リストの差分を算出する。
+	 * 
+	 * @param a 「変更前」の文字列リスト。
+	 * @param b 「変更後」の文字列リスト。
+	 * @return 算出結果の「差分」情報を保持する。
+	 */
+	default Info<String> diff(List<String> a, List<String> b) {
+		return diff(a, b, (x, y) -> x.compareTo(y));
 	}
 
 	/**
