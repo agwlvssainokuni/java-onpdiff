@@ -19,6 +19,7 @@ package cherry.diff.ond;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.Test;
@@ -401,5 +402,23 @@ public class OndDiffTest {
 		assertEquals(Diff.Type.DEL, ses.get(6).getType());
 		assertEquals(Diff.Type.ADD, ses.get(7).getType());
 		assertEquals(Diff.Type.SAME, ses.get(8).getType());
+	}
+
+	// 完全不一致
+	@Test
+	public void 完全不一致() {
+		List<Integer> a = asList(0, 1, 2, 3, 4);
+		List<Integer> b = asList(5, 6, 7, 8, 9);
+		Info<Integer> info = idiff(a, b);
+		assertEquals(10, info.getEdist());
+		assertEquals(Collections.emptyList(), info.getLcs());
+		List<Elem<Integer>> ses = info.getSes();
+		assertEquals(10, ses.size());
+		for (int i = 0; i < 5; i++) {
+			assertEquals(Diff.Type.DEL, ses.get(i).getType());
+		}
+		for (int i = 5; i < 10; i++) {
+			assertEquals(Diff.Type.ADD, ses.get(i).getType());
+		}
 	}
 }
