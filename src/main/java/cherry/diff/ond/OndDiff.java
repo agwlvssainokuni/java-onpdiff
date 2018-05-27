@@ -30,14 +30,12 @@ public class OndDiff implements Diff {
 
 	@Override
 	public <T> Info<T> diff(List<T> a, List<T> b, Comparator<T> comparator) {
+
 		int N = a.size();
 		int M = b.size();
-		return doDiff(a, b, N, M, comparator);
-	}
 
-	private <T> Info<T> doDiff(List<T> a, List<T> b, int N, int M, Comparator<T> comparator) {
 		// ////////////////////////////////////////////////////////
-		// ON(NP)アルゴリズム本体：ここから
+		// ON(ND)アルゴリズム本体：ここから
 		int MAX = M + N;
 		Path[] V = new Path[MAX + MAX + 1];
 		int offset = MAX;
@@ -69,7 +67,7 @@ public class OndDiff implements Diff {
 				}
 			}
 		}
-		// ON(NP)アルゴリズム本体：ここまで
+		// ON(ND)アルゴリズム本体：ここまで
 		// ////////////////////////////////////////////////////////
 
 		// リストの先頭から見られるよう並べ直す。
