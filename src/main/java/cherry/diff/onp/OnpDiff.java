@@ -68,7 +68,7 @@ public class OnpDiff implements Diff {
 
 		// リストの先頭から見られるよう並べ直す。
 		List<Path> l = new LinkedList<>();
-		for (Path pt = fp[delta + offset]; pt.getY() >= 0; pt = pt.getPrev()) {
+		for (Path pt = fp[delta + offset]; pt.getPrev() != null; pt = pt.getPrev()) {
 			l.add(0, pt);
 		}
 

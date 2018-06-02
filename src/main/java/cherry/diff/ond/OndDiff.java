@@ -73,7 +73,7 @@ public class OndDiff implements Diff {
 		// リストの先頭から見られるよう並べ直す。
 		// ※Edit Graphの末端は「k=N-M」なので、そこから逆順に辿る。
 		List<Path> l = new LinkedList<>();
-		for (Path pt = V[N - M + offset]; pt.getX() > 0; pt = pt.getPrev()) {
+		for (Path pt = V[N - M + offset]; pt.getPrev() != null; pt = pt.getPrev()) {
 			l.add(0, pt);
 		}
 
