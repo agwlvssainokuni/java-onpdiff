@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cherry.diff.ond;
+package cherry.diff.myers;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -26,7 +26,7 @@ import cherry.diff.Diff;
 /**
  * "An ON(ND) Difference Algorithm"
  */
-public class OndDiff implements Diff {
+public class MyersDiff implements Diff {
 
 	@Override
 	public <T> Info<T> diff(List<T> a, List<T> b, Comparator<T> comparator) {
@@ -35,7 +35,7 @@ public class OndDiff implements Diff {
 		int M = b.size();
 
 		// ////////////////////////////////////////////////////////
-		// ON(ND)アルゴリズム本体：ここから
+		// Myersアルゴリズム本体：ここから
 		int MAX = M + N;
 		Path[] V = new Path[MAX + MAX + 1];
 		int offset = MAX;
@@ -67,7 +67,7 @@ public class OndDiff implements Diff {
 				}
 			}
 		}
-		// ON(ND)アルゴリズム本体：ここまで
+		// Myersアルゴリズム本体：ここまで
 		// ////////////////////////////////////////////////////////
 
 		// リストの先頭から見られるよう並べ直す。

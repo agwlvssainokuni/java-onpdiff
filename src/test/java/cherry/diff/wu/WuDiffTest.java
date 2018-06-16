@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cherry.diff.onp;
+package cherry.diff.wu;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
@@ -28,9 +28,9 @@ import cherry.diff.Diff;
 import cherry.diff.Diff.Elem;
 import cherry.diff.Diff.Info;
 
-public class OnpDiffTest {
+public class WuDiffTest {
 
-	private final Diff impl = new OnpDiff();
+	private final Diff impl = new WuDiff();
 
 	private Info<Integer> idiff(List<Integer> a, List<Integer> b) {
 		return impl.diff(a, b, (i, j) -> (i - j));

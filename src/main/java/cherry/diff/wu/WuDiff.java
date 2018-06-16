@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cherry.diff.onp;
+package cherry.diff.wu;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -26,7 +26,7 @@ import cherry.diff.Diff;
 /**
  * "An ON(NP) Sequence Comparison Algorithm"
  */
-public class OnpDiff implements Diff {
+public class WuDiff implements Diff {
 
 	@Override
 	public <T> Info<T> diff(List<T> a, List<T> b, Comparator<T> comparator) {
@@ -43,7 +43,7 @@ public class OnpDiff implements Diff {
 		MaxAndSnake maxAndSnake = createMaxAndSnake(a, b, m, n, normal, comparator);
 
 		// ////////////////////////////////////////////////////////
-		// ON(NP)アルゴリズム本体：ここから
+		// Wuアルゴリズム本体：ここから
 		int offset = m + 1;
 		Path[] fp = new Path[(m + 1) + (n + 1) + 1];
 		for (int k = -(m + 1); k <= (n + 1); k++) {
@@ -63,7 +63,7 @@ public class OnpDiff implements Diff {
 			fp[delta + offset] = maxAndSnake.apply(delta, fp[delta - 1 + offset], fp[delta + 1 + offset]);
 		} while (fp[delta + offset].getY() < n);
 		int edist = delta + 2 * p;
-		// ON(NP)アルゴリズム本体：ここまで
+		// Wuアルゴリズム本体：ここまで
 		// ////////////////////////////////////////////////////////
 
 		// リストの先頭から見られるよう並べ直す。
@@ -112,7 +112,7 @@ public class OnpDiff implements Diff {
 			Comparator<T> comparator) {
 		return (int k, Path pt1, Path pt2) -> {
 
-			// ON(NP)アルゴリズム：max
+			// Wuアルゴリズム：max
 			int y;
 			Path pt;
 			if (pt1.getY() + 1 == pt2.getY()) {
@@ -134,7 +134,7 @@ public class OnpDiff implements Diff {
 				pt = pt2;
 			}
 
-			// ON(NP)アルゴリズム：snake
+			// Wuアルゴリズム：snake
 			int x = y - k;
 			while (x < m && y < n && comparator.compare(a.get(x), b.get(y)) == 0) {
 				x += 1;
