@@ -16,12 +16,12 @@
 
 package cherry.diff.myers;
 
+import cherry.diff.Diff;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
-
-import cherry.diff.Diff;
 
 /**
  * "An ON(ND) Difference Algorithm"

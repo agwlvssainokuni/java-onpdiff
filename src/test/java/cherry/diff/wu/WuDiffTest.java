@@ -16,17 +16,16 @@
 
 package cherry.diff.wu;
 
-import static java.util.Arrays.asList;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import cherry.diff.Diff;
+import cherry.diff.Diff.Elem;
+import cherry.diff.Diff.Info;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.jupiter.api.Test;
-
-import cherry.diff.Diff;
-import cherry.diff.Diff.Elem;
-import cherry.diff.Diff.Info;
+import static java.util.Arrays.asList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class WuDiffTest {
 
