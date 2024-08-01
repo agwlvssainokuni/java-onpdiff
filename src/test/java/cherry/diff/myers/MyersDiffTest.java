@@ -17,12 +17,12 @@
 package cherry.diff.myers;
 
 import static java.util.Arrays.asList;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import cherry.diff.Diff;
 import cherry.diff.Diff.Elem;
