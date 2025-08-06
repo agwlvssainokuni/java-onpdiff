@@ -27,15 +27,35 @@ import java.util.List;
 import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * {@link MyersDiff}クラスのテストケース。
+ * <p>
+ * 様々なシーケンスパターンに対してMyers差分アルゴリズムの動作を検証する。
+ * テストケースには同一シーケンス、要素の追加・削除・置換、複合的な変更が含まれる。
+ * </p>
+ */
 public class MyersDiffTest {
 
     private final Diff impl = new MyersDiff();
 
+    /**
+     * Integer型のリストに対して差分計算を実行するヘルパーメソッド。
+     *
+     * @param a 変更前のIntegerリスト
+     * @param b 変更後のIntegerリスト
+     * @return 差分情報
+     */
     private Info<Integer> idiff(List<Integer> a, List<Integer> b) {
         return impl.diff(a, b, (i, j) -> (i - j));
     }
 
-    // 同一
+    /**
+     * 同一シーケンスのテスト。
+     * <p>
+     * 完全に同じ要素を持つシーケンス同士の差分を計算する。
+     * 編集距離は0、全要素がLCSに含まれ、全要素がSAME操作になることを確認する。
+     * </p>
+     */
     @Test
     public void 同一シーケンス() {
         List<Integer> a = asList(0, 1, 2, 3, 4, 5, 6);
@@ -55,6 +75,13 @@ public class MyersDiffTest {
     // ・末尾
     // ・途中
 
+    /**
+     * シーケンス先頭への1要素追加テスト。
+     * <p>
+     * 元シーケンスの先頭に1つの要素が追加された場合の差分を検証する。
+     * 編集距離は1、LCSは元のシーケンス、SESの最初がADD操作になることを確認する。
+     * </p>
+     */
     @Test
     public void 追加_先頭_1要素() {
         List<Integer> a = asList(0, 1, 2, 3, 4, 5, 6);
@@ -70,6 +97,13 @@ public class MyersDiffTest {
         }
     }
 
+    /**
+     * シーケンス先頭への3要素追加テスト。
+     * <p>
+     * 元シーケンスの先頭に3つの要素が追加された場合の差分を検証する。
+     * 編集距離は3、LCSは元のシーケンス、SESの最初の3つがADD操作になることを確認する。
+     * </p>
+     */
     @Test
     public void 追加_先頭_3要素() {
         List<Integer> a = asList(0, 1, 2, 3, 4, 5, 6);
@@ -87,6 +121,13 @@ public class MyersDiffTest {
         }
     }
 
+    /**
+     * シーケンス末尾への1要素追加テスト。
+     * <p>
+     * 元シーケンスの末尾に1つの要素が追加された場合の差分を検証する。
+     * 編集距離は1、LCSは元のシーケンス、SESの最後がADD操作になることを確認する。
+     * </p>
+     */
     @Test
     public void 追加_末尾_1要素() {
         List<Integer> a = asList(0, 1, 2, 3, 4, 5, 6);
@@ -119,6 +160,13 @@ public class MyersDiffTest {
         assertEquals(Diff.Type.ADD, ses.get(9).getType());
     }
 
+    /**
+     * シーケンス途中への1要素追加テスト。
+     * <p>
+     * 元シーケンスの途中に1つの要素が挿入された場合の差分を検証する。
+     * 編集距離は1、LCSは元のシーケンス、SESの途中にADD操作が現れることを確認する。
+     * </p>
+     */
     @Test
     public void 追加_途中_1要素() {
         List<Integer> a = asList(0, 1, 2, 3, 4, 5, 6);
@@ -162,6 +210,13 @@ public class MyersDiffTest {
     // ・末尾
     // ・途中
 
+    /**
+     * シーケンス先頭からの1要素削除テスト。
+     * <p>
+     * 元シーケンスの先頭から1つの要素が削除された場合の差分を検証する。
+     * 編集距離は1、SESの最初がDEL操作になることを確認する。
+     * </p>
+     */
     @Test
     public void 削除_先頭_1要素() {
         List<Integer> a = asList(0, 1, 2, 3, 4, 5, 6);
@@ -194,6 +249,13 @@ public class MyersDiffTest {
         }
     }
 
+    /**
+     * シーケンス末尾からの1要素削除テスト。
+     * <p>
+     * 元シーケンスの末尾から1つの要素が削除された場合の差分を検証する。
+     * 編集距離は1、SESの最後がDEL操作になることを確認する。
+     * </p>
+     */
     @Test
     public void 削除_末尾_1要素() {
         List<Integer> a = asList(0, 1, 2, 3, 4, 5, 6);
@@ -269,6 +331,13 @@ public class MyersDiffTest {
     // ・末尾
     // ・途中
 
+    /**
+     * シーケンス先頭の1要素変更テスト。
+     * <p>
+     * 元シーケンスの先頭要素が別の値に変更された場合の差分を検証する。
+     * 変更はDEL+ADDの組み合わせとして表現され、編集距離は2になることを確認する。
+     * </p>
+     */
     @Test
     public void 変更_先頭_1要素() {
         List<Integer> a = asList(0, 1, 2, 3, 4, 5, 6);
@@ -383,6 +452,13 @@ public class MyersDiffTest {
         }
     }
 
+    /**
+     * 引数順序入れ替えテスト。
+     * <p>
+     * diff(A, B)とdiff(B, A)で引数を入れ替えた場合の結果を検証する。
+     * 編集距離は同じ値になり、SESではADDとDELが入れ替わることを確認する。
+     * </p>
+     */
     @Test
     public void AB入れ替え実行の場合() {
         List<Integer> a = asList(0, 1, 2, 3, 4, 5, 6);
@@ -404,6 +480,14 @@ public class MyersDiffTest {
     }
 
     // 完全不一致
+
+    /**
+     * 完全不一致シーケンステスト。
+     * <p>
+     * 2つのシーケンスが全く異なる要素を持つ場合の差分を検証する。
+     * LCSは空、編集距離は両シーケンスの長さの合計、SESは全DELと全ADDになることを確認する。
+     * </p>
+     */
     @Test
     public void 完全不一致() {
         List<Integer> a = asList(0, 1, 2, 3, 4);

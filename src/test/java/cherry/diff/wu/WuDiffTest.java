@@ -27,15 +27,36 @@ import java.util.List;
 import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * {@link WuDiff}クラスのテストケース。
+ * <p>
+ * 様々なシーケンスパターンに対してWu差分アルゴリズムの動作を検証する。
+ * テストケースには同一シーケンス、要素の追加・削除・置換、複合的な変更が含まれる。
+ * MyersDiffTestと同じテストケースで両アルゴリズムの結果一致性を確認している。
+ * </p>
+ */
 public class WuDiffTest {
 
     private final Diff impl = new WuDiff();
 
+    /**
+     * Integer型のリストに対して差分計算を実行するヘルパーメソッド。
+     *
+     * @param a 変更前のIntegerリスト
+     * @param b 変更後のIntegerリスト
+     * @return 差分情報
+     */
     private Info<Integer> idiff(List<Integer> a, List<Integer> b) {
         return impl.diff(a, b, (i, j) -> (i - j));
     }
 
-    // 同一
+    /**
+     * 同一シーケンスのテスト。
+     * <p>
+     * 完全に同じ要素を持つシーケンス同士の差分を計算する。
+     * 編集距離は0、全要素がLCSに含まれ、全要素がSAME操作になることを確認する。
+     * </p>
+     */
     @Test
     public void 同一シーケンス() {
         List<Integer> a = asList(0, 1, 2, 3, 4, 5, 6);
@@ -55,6 +76,13 @@ public class WuDiffTest {
     // ・末尾
     // ・途中
 
+    /**
+     * シーケンス先頭への1要素追加テスト。
+     * <p>
+     * Wuアルゴリズムで元シーケンスの先頭に1つの要素が追加された場合の差分を検証する。
+     * Myersアルゴリズムと同じ結果を得ることを確認する。
+     * </p>
+     */
     @Test
     public void 追加_先頭_1要素() {
         List<Integer> a = asList(0, 1, 2, 3, 4, 5, 6);
@@ -70,6 +98,13 @@ public class WuDiffTest {
         }
     }
 
+    /**
+     * シーケンス先頭への3要素追加テスト。
+     * <p>
+     * Wuアルゴリズムで元シーケンスの先頭に3つの要素が追加された場合の差分を検証する。
+     * Myersアルゴリズムと同じ結果を得ることを確認する。
+     * </p>
+     */
     @Test
     public void 追加_先頭_3要素() {
         List<Integer> a = asList(0, 1, 2, 3, 4, 5, 6);
