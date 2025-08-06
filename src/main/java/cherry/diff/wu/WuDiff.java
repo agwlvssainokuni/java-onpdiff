@@ -24,10 +24,35 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * "An ON(NP) Sequence Comparison Algorithm"
+ * Wu差分アルゴリズムの実装。
+ * <p>
+ * Sun Wu, Udi Manber, Gene Myers, Webb Miller著
+ * "An ON(NP) Sequence Comparison Algorithm" (1989)
+ * に基づいた差分計算アルゴリズムを実装している。
+ * </p>
+ * <p>
+ * このアルゴリズムは時間計算量O((N+M)P)、空間計算量O(N+M)を持つ。
+ * ここでN, Mはそれぞれ入力シーケンスのサイズ、Pは共通部分列の数である。
+ * 特に差分が少ない場合にMyersアルゴリズムよりも効率的である。
+ * </p>
+ *
+ * @see <a href="https://doi.org/10.1016/0020-0190(89)90010-2">An ON(NP) Sequence Comparison Algorithm</a>
  */
 public class WuDiff implements Diff {
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Wuアルゴリズムを使用して二つのリスト間の差分を計算する。
+     * 性能最適化のため、シーケンスの長さを比較し、短い方を第一引数として処理する。
+     * </p>
+     *
+     * @param <T>        要素の型
+     * @param a          変更前のリスト
+     * @param b          変更後のリスト
+     * @param comparator 要素の同一性を判定するComparator
+     * @return 差分情報（編集距離、最短編集スクリプト、最長共通部分列）
+     */
     @Override
     public <T> Info<T> diff(List<T> a, List<T> b, Comparator<T> comparator) {
         int m = a.size();
@@ -39,6 +64,18 @@ public class WuDiff implements Diff {
         }
     }
 
+    /**
+     * Wuアルゴリズムの本体処理を実行する。
+     *
+     * @param <T>        要素の型
+     * @param a          短い方のシーケンス
+     * @param b          長い方のシーケンス
+     * @param m          シーケンスaのサイズ
+     * @param n          シーケンスbのサイズ
+     * @param normal     元の順序で処理しているかどうか
+     * @param comparator 要素の同一性を判定するComparator
+     * @return 差分情報
+     */
     private <T> Info<T> doDiff(List<T> a, List<T> b, int m, int n, boolean normal, Comparator<T> comparator) {
         MaxAndSnake maxAndSnake = createMaxAndSnake(a, b, m, n, normal, comparator);
 
@@ -108,6 +145,22 @@ public class WuDiff implements Diff {
         return new Info<>(edist, ses, lcs);
     }
 
+    /**
+     * Wuアルゴリズムで使用するMaxAndSnake操作を生成する。
+     * <p>
+     * max操作では二つの経路からより進んだ方を選択し、
+     * snake操作では共通要素を連続してスキップする。
+     * </p>
+     *
+     * @param <T>        要素の型
+     * @param a          シーケンスa
+     * @param b          シーケンスb
+     * @param m          シーケンスaのサイズ
+     * @param n          シーケンスbのサイズ
+     * @param normal     元の順序で処理しているかどうか
+     * @param comparator 要素の同一性を判定するComparator
+     * @return MaxAndSnake操作の実装
+     */
     private <T> MaxAndSnake createMaxAndSnake(List<T> a, List<T> b, int m, int n, boolean normal,
                                               Comparator<T> comparator) {
         return (int k, Path pt1, Path pt2) -> {
@@ -144,30 +197,79 @@ public class WuDiff implements Diff {
         };
     }
 
+    /**
+     * Wuアルゴリズムのmax及snake操作を定義する関数型インターフェース。
+     */
     @FunctionalInterface
     private interface MaxAndSnake {
+        /**
+         * 指定されたk線上でmax及snake操作を実行し、新しい経路点を返す。
+         *
+         * @param k   k線の値
+         * @param pt1 k-1線からの経路点
+         * @param pt2 k+1線からの経路点
+         * @return 新しい経路点
+         */
         Path apply(int k, Path pt1, Path pt2);
     }
 
+    /**
+     * Wuアルゴリズムの編集グラフにおける経路上の点を表現するクラス。
+     * <p>
+     * Myersアルゴリズムとは異なり、こちらはy座標を保持する。
+     * k線上の点は(x, y)で表現され、x = y - kで計算される。
+     * </p>
+     */
     private static class Path {
+        /**
+         * k線の値（y - xで計算される対角線インデックス）
+         */
         private final int k;
+        /**
+         * 編集グラフのy座標（シーケンスbのインデックス）
+         */
         private final int y;
+        /**
+         * 前の経路点への参照（経路を逆辿りするため）
+         */
         private final Path prev;
 
+        /**
+         * 経路点のインスタンスを構築する。
+         *
+         * @param k    k線の値
+         * @param y    y座標
+         * @param prev 前の経路点
+         */
         public Path(int k, int y, Path prev) {
             this.k = k;
             this.y = y;
             this.prev = prev;
         }
 
+        /**
+         * k線の値を取得する。
+         *
+         * @return k線の値
+         */
         public int getK() {
             return k;
         }
 
+        /**
+         * y座標を取得する。
+         *
+         * @return y座標
+         */
         public int getY() {
             return y;
         }
 
+        /**
+         * 前の経路点への参照を取得する。
+         *
+         * @return 前の経路点
+         */
         public Path getPrev() {
             return prev;
         }

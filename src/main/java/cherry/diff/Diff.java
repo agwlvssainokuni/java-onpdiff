@@ -82,6 +82,13 @@ public interface Diff {
         private final List<Elem<T>> ses;
         private final List<T> lcs;
 
+        /**
+         * 差分情報のインスタンスを構築する。
+         *
+         * @param edist Edit Distance (編集距離)
+         * @param ses   Shortest Edit Script (最短編集スクリプト)
+         * @param lcs   Longest Common Subsequence (最長共通部分列)
+         */
         public Info(int edist, List<Elem<T>> ses, List<T> lcs) {
             this.edist = edist;
             this.ses = ses;
@@ -89,21 +96,30 @@ public interface Diff {
         }
 
         /**
-         * @return Edit Distance.
+         * Edit Distance (編集距離) を取得する。
+         * 二つのシーケンス間の最小編集操作数を表す。
+         *
+         * @return Edit Distance
          */
         public int getEdist() {
             return edist;
         }
 
         /**
-         * @return Shortest Edit Script.
+         * Shortest Edit Script (最短編集スクリプト) を取得する。
+         * シーケンスaをシーケンスbに変換するための編集操作の列を表す。
+         *
+         * @return Shortest Edit Script
          */
         public List<Elem<T>> getSes() {
             return ses;
         }
 
         /**
-         * @return Longest Common Subsequence.
+         * Longest Common Subsequence (最長共通部分列) を取得する。
+         * 二つのシーケンスに共通する最長の部分列を表す。
+         *
+         * @return Longest Common Subsequence
          */
         public List<T> getLcs() {
             return lcs;
@@ -114,30 +130,48 @@ public interface Diff {
      * 当該要素の差分の種類。
      */
     public enum Type {
-        // 差分がない。
+        /** 差分がない (共通要素) */
         SAME,
-        // 追加である。
+        /** 追加である */
         ADD,
-        // 削除である。
+        /** 削除である */
         DEL
     }
 
     /**
      * 要素ごとの差分を保持する。
+     *
+     * @param <T> 要素の型
      */
     public static class Elem<T> {
         private final Type type;
         private final T value;
 
+        /**
+         * 差分要素のインスタンスを構築する。
+         *
+         * @param type  差分の種類
+         * @param value 要素の値
+         */
         public Elem(Type type, T value) {
             this.type = type;
             this.value = value;
         }
 
+        /**
+         * 差分の種類を取得する。
+         *
+         * @return 差分の種類
+         */
         public Type getType() {
             return type;
         }
 
+        /**
+         * 要素の値を取得する。
+         *
+         * @return 要素の値
+         */
         public T getValue() {
             return value;
         }

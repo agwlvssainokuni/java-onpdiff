@@ -24,10 +24,34 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * "An ON(ND) Difference Algorithm"
+ * Myers差分アルゴリズムの実装。
+ * <p>
+ * Eugene W. Myers著 "An ON(ND) Difference Algorithm and Its Variations" (1986)
+ * に基づいた差分計算アルゴリズムを実装している。
+ * </p>
+ * <p>
+ * このアルゴリズムは時間計算量O((N+M)D)、空間計算量O((N+M)D)を持つ。
+ * ここでN, Mはそれぞれ入力シーケンスのサイズ、DはEdit Distanceである。
+ * </p>
+ *
+ * @see <a href="http://www.xmailserver.org/diff2.pdf">An ON(ND) Difference Algorithm and Its Variations</a>
  */
 public class MyersDiff implements Diff {
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Myersアルゴリズムを使用して二つのリスト間の差分を計算する。
+     * アルゴリズムは編集グラフを構築し、最短経路を探索することで
+     * 最小編集距離と最短編集スクリプトを求める。
+     * </p>
+     *
+     * @param <T>        要素の型
+     * @param a          変更前のリスト
+     * @param b          変更後のリスト
+     * @param comparator 要素の同一性を判定するComparator
+     * @return 差分情報（編集距離、最短編集スクリプト、最長共通部分列）
+     */
     @Override
     public <T> Info<T> diff(List<T> a, List<T> b, Comparator<T> comparator) {
 
@@ -114,25 +138,63 @@ public class MyersDiff implements Diff {
         return new Info<>(edist, ses, lcs);
     }
 
+    /**
+     * 編集グラフにおける経路上の点を表現するクラス。
+     * <p>
+     * 編集グラフではk線（k = x - y）上の点(x, y)で経路を追跡する。
+     * このクラスはその点の位置と前の点への参照を保持する。
+     * </p>
+     */
     private static class Path {
+        /**
+         * k線の値（x - yで計算される対角線インデックス）
+         */
         private final int k;
+        /**
+         * 編集グラフのx座標（シーケンスaのインデックス）
+         */
         private final int x;
+        /**
+         * 前の経路点への参照（経路を逆辿りするため）
+         */
         private final Path prev;
 
+        /**
+         * 経路点のインスタンスを構築する。
+         *
+         * @param k    k線の値
+         * @param x    x座標
+         * @param prev 前の経路点
+         */
         public Path(int k, int x, Path prev) {
             this.k = k;
             this.x = x;
             this.prev = prev;
         }
 
+        /**
+         * k線の値を取得する。
+         *
+         * @return k線の値
+         */
         public int getK() {
             return k;
         }
 
+        /**
+         * x座標を取得する。
+         *
+         * @return x座標
+         */
         public int getX() {
             return x;
         }
 
+        /**
+         * 前の経路点への参照を取得する。
+         *
+         * @return 前の経路点
+         */
         public Path getPrev() {
             return prev;
         }
