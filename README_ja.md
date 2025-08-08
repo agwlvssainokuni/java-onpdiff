@@ -185,8 +185,8 @@ cd java-onpdiff
 
 ## 参考文献
 
-- Myers, Eugene W. "An O(ND) difference algorithm and its variations." Algorithmica 1.1-4 (1986): 251-266.
-- Wu, Sun, et al. "An O(NP) sequence comparison algorithm." Information Processing Letters 35.6 (1990): 317-323.
+- Myers, Eugene W. "An O(ND) difference algorithm and its variations." Algorithmica 1.1-4 (1986): 251-266. [DOI: 10.1007/BF01840446](https://doi.org/10.1007/BF01840446) | [PDF](http://www.xmailserver.org/diff2.pdf)
+- Wu, Sun, et al. "An O(NP) sequence comparison algorithm." Information Processing Letters 35.6 (1990): 317-323. [DOI: 10.1016/0020-0190(90)90035-V](https://doi.org/10.1016/0020-0190(90)90035-V) | [PDF](https://publications.mpi-cbg.de/Wu_1990_6334.pdf)
 
 ## 貢献
 
